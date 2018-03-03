@@ -1,0 +1,122 @@
+<% include ./header %>
+
+<div class='container mt-4'>
+  <div class='row'>
+    <div class='col-md-offset-6'></div>
+
+    <div class='col-md-6 ml-auto mr-auto'>
+      <h1>Register</h1>
+
+      <form action='/register' method='post' enctype="application/x-www-form-urlencoded" class='mt-3'>
+        <div class="form-group">
+          <label for="register-email">Email:</label>
+          <input type="email" class="form-control" value='<%= email %>' name='email' id='register-email' placeholder="Email" required>
+          <div class="alert alert-danger d-none" role="alert" id='alert-register-email'></div>
+          <% if (messages.emailExist) { %>
+          <div class='alert alert-danger'>messages.emailExist</div>
+          <% } %>
+          <% if (messages.emailEmpty) { %>
+          <div class='alert alert-danger'><%= messages.emailEmpty %></div>
+          <% } %>
+        </div>
+
+        <div class="form-group">
+          <label for="register-pw">Password:</label>
+          <input type="password" class="form-control" name='password' id='register-password' placeholder="Password" required>
+          <div class="alert alert-danger d-none" role="alert" id='alert-register-password'></div>
+          <% if (messages.passwordEmpty) { %>
+          <div class='alert alert-danger'><%= messages.passwordEmpty %></div>
+          <% } %>
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputPassword1">First Name:</label>
+          <input type="text" id='f_name' value='<%= f_name %>' class="form-control" name='f_name' placeholder="First Name">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputPassword1">Last Name:</label>
+          <input type="text" id='l_name' value='<%= l_name %>' class="form-control" name='l_name' placeholder="Last Name">
+        </div>
+
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" id='checkbox' name='checkbox' class="form-check-input">
+            I agree to sell my soul.
+          </label>
+          <% if (messages.checkboxEmpty) { %>
+          <div class='alert alert-danger'><%= messages.checkboxEmpty %></div>
+          <% } %>
+        </div>
+
+        <button type="submit" id='register' class="btn btn-info mt-3">Register</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<script>
+let emailRegex = /^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$/;
+let passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+let registerEmail = document.getElementById('register-email');
+let alertRegisterEmail = document.getElementById('alert-register-email');
+let registerPassword = document.getElementById('register-password');
+let alertRegisterPassword = document.getElementById('alert-register-password');
+let registerButton = document.getElementById('register')
+let setText = function(div, text) {
+  div.classList.remove('d-none');
+  div.innerHTML = text;
+};
+
+
+//Validate email
+registerEmail.addEventListener('blur', (event) => {
+  if (registerEmail.value.length == 0) {
+    setText(alertRegisterEmail, 'This field is required.');
+  }
+  else if (!emailRegex.test(registerEmail.value)) {
+    setText(alertRegisterEmail, 'Invalid email address.');
+  }
+  else {
+    alertRegisterEmail.classList.add('d-none');
+    let xhr = new XMLHttpRequest();
+    let url = '/register/check/' + registerEmail.value;
+    xhr.open('GET', url, true);
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        if (xhr.responseText == 'email exist') {
+          setText(alertRegisterEmail, 'This email has been used.');
+        }
+        else {
+          alertRegisterEmail.classList.remove('d-none', 'alert-danger');
+          alertRegisterEmail.classList.add('alert-success');
+          alertRegisterEmail.innerHTML = 'You can use this email.';
+          setTimeout(() => {
+            alertRegisterEmail.classList.remove('alert-success');
+            alertRegisterEmail.classList.add('d-none', 'alert-danger');
+          }, 2500);
+        }
+      }
+    };
+    xhr.send();
+  }
+}, false);
+
+
+//Validate password
+registerPassword.addEventListener('blur', (event) => {
+  if (registerPassword.value.length == 0) {
+    setText(alertRegisterPassword, 'This field is required.');
+  }
+  else if (!passwordRegex.test(registerPassword.value)) {
+    setText(alertRegisterPassword, 'Password must be longer than 8 chars, at least 1 number and 1 letter.');
+  }
+  else {
+    alertRegisterPassword.classList.add('d-none');
+  }
+}, false);
+
+
+</script>
+<% include ./footer %>

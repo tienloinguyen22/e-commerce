@@ -1,0 +1,47 @@
+<% include ./header %>
+
+  <div class='container mt-4'>
+    <div class='row product-view'>
+
+      <div class='col-md-5'>
+        <div class="card">
+          <div class="card-body ml-auto mr-auto">
+            <img src='/photos/<%= product.img %>' alt='Product' class='fluid-image'>
+          </div>
+        </div>
+      </div>
+
+      <div class='col-md-7'>
+        <h2 class='product-title display-3'><%= product.title.toUpperCase() %></h2>
+        <h4 class='author text-muted'><%= product.author.toUpperCase() %></h4>
+        <p class='stock-status'>Status: <span class='text-success font-weight-bold'><%= product.status.toUpperCase() %></span></p>
+        <p class='price'>Price: <span class='text-danger font-weight-bold'><%= product.price%>đ</span></p>
+        <p class='short-description'>
+          <%= product.description.substr(0, 100) + '... '%>
+          <a href='#full-description'>More</a>
+        </p>
+        <div class='add-to-cart'>
+          <input type='number' class='quantity' title='Numbers' min='1' value='1' max='50' >
+          <button class='add-to-cart-button btn btn-info' type='submit'><i class="fa fa-shopping-cart" aria-hidden="true"></i> Add to Cart</button>
+        </div>
+        <div class='discount mt-3'>
+          <h3 class='text-warning font-weight-bold'>Discounts</h3>
+          <ul>
+            <li>Discount 1: Free shipping 20km.</li>
+            <li>Discount 2: -20% for Combo 3 books or more.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class='row mt-4 product-description'>
+      <div class='col-md-12 border border rounded'>
+        <h2 class='text-info font-weight-bold'>Book Description</h2>
+        <p class='full-description' id='full-description'>
+        <%= product.description %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+<% include ./footer %>

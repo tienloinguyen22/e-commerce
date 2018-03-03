@@ -1,0 +1,66 @@
+<% include ./header %>
+
+<div class='container mt-4'>
+
+  <div class='row search'>
+    <div class='col-md-12'>
+      <div class="input-group mb-3 input-group-lg">
+        <input type="text" class="form-control" placeholder="Search" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <a class='btn btn-info' href='#'>Search</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class='row menu-ads'>
+    <div class='col-md-3 menu'>
+      <ul class="list-group">
+        <li class="list-group-item bg-info">
+          <a href='/categories/self help' class='text-white'>Self Help</a>
+        </li>
+        <li class="list-group-item bg-info">
+          <a href='/categories/economic' class='text-white'>Economic</a>
+        </li>
+        <li class="list-group-item bg-info">
+          <a href='/categories/technology' class='text-white'>Technology</a>
+        </li>
+        <li class="list-group-item bg-info">
+          <a href='/categories/history' class='text-white'>History</a>
+        </li>
+        <li class="list-group-item bg-info">
+          <a href='/categories/creativity' class='text-white'>Creativity</a>
+        </li>
+        <li class="list-group-item bg-info">
+          <a href='/categories/commic' class='text-white'>Commic</a>
+        </li>
+        <li class="list-group-item bg-info">
+          <a href='/categories/literature' class='text-white'>Literature</a>
+        </li>
+      </ul>
+    </div>
+
+    <% if (data.length > 0) { %> 
+      <% for (let item of data) { %>
+        <div class='col-md-3' id='item'>
+          <div class="card">
+            <a href='/product/<%= item._id %>'><img class="card-img-top" src="/photos/<%= item.img %>" alt="Card image cap"></a>
+            <div class="card-body">
+              <a href='/product/<%= item._id %>'><h5 class="card-title"><%= item.title.toUpperCase() %></h5></a>
+              <p class="card-text short-description"><%= item.description.substr(0, 50) + '...' %></p>
+              <a href="/product/<%= item._id %>" class="btn btn-info">Details</a>
+            </div>
+          </div>
+        </div>
+        <% } %>
+      <% } else if (data.length == 0) { %>
+      <div class='col-md-9'>
+        <div class='alert alert-danger display-4'>This Category doesnt have any books.</div>
+      </div>
+      <% } %>
+  </div>
+
+</div>
+
+
+<% include ./footer %>
